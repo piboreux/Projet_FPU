@@ -10,7 +10,7 @@ cModel Technology
 dC:/Users/PJ/Desktop/LELEC2531/Midterm/Code/Q3
 vadder
 Z0 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
-Z1 !s110 1765798365
+Z1 !s110 1765806918
 !i10b 1
 !s100 CDQSEiFa[:iBPd?43OR0n0
 IoSc`8;I60GT>ZZGKzTi=E0
@@ -26,7 +26,7 @@ Z8 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z9 !s108 1765798365.000000
+Z9 !s108 1765806918.000000
 Z10 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv|
 Z11 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv|
 !i113 1
@@ -154,25 +154,25 @@ R12
 R13
 vdmem
 R0
-R1
+Z14 !s110 1765806919
 !i10b 1
 !s100 <fA1GdNZ3NP]6F?jdGkB^3
 IiLMj3QhaQTU93]WMMiZXo2
 R2
-Z14 !s105 MyDE0_Nano_sv_unit
+Z15 !s105 MyDE0_Nano_sv_unit
 S1
 R4
-Z15 w1765798205
-Z16 8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv
-Z17 FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv
+Z16 w1765798205
+Z17 8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv
+Z18 FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv
 L0 210
 R8
 r1
 !s85 0
 31
-R9
-Z18 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv|
-Z19 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv|
+Z19 !s108 1765806919.000000
+Z20 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv|
+Z21 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv|
 !i113 1
 R12
 R13
@@ -322,15 +322,15 @@ R12
 R13
 vfpu_top
 R0
-R1
+R14
 !i10b 1
-!s100 W52K@OIk[d4<oaSGfT26d1
-IB=keTcQj?RhEg@N8<dSl]3
+!s100 O2<oRhnaL`JIeJS]@6MNQ2
+IK4b9dIe21nbnmRU^NlUYk1
 R2
 !s105 fpu_top_sv_unit
 S1
 R4
-w1765797991
+w1765806869
 8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv
 FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv
 L0 7
@@ -338,7 +338,7 @@ R8
 r1
 !s85 0
 31
-R9
+R19
 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv|
 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv|
 !i113 1
@@ -370,25 +370,25 @@ R12
 R13
 vimem
 R0
-R1
+R14
 !i10b 1
 !s100 Jhz7FNW0COlFmdb1bGHUg3
 IgH3?Q`H76ji:?9X<5f:@g1
 R2
-R14
+R15
 S1
 R4
-R15
 R16
 R17
+R18
 L0 219
 R8
 r1
 !s85 0
 31
-R9
-R18
 R19
+R20
+R21
 !i113 1
 R12
 R13
@@ -442,40 +442,40 @@ R12
 R13
 vMyDE0_Nano
 R0
-R1
+R14
 !i10b 1
 !s100 TRYOZG0P1g64h;DR=00mL3
 IVzcLDgjAAdj5LX;icD8;z2
 R2
-R14
+R15
 S1
 R4
-R15
 R16
 R17
+R18
 L0 5
 R8
 r1
 !s85 0
 31
-R9
-R18
 R19
+R20
+R21
 !i113 1
 R12
 R13
 n@my@d@e0_@nano
 vMyTestbench
 R0
-R1
+R14
 !i10b 1
-!s100 Y7825Wh=5LhP:`CGl7SOJ1
-IHJgnk[Vd^PgT_@V9I2=bT2
+!s100 X>4[?Nf?C2jOU`?PlMWZ;3
+ImZzUodfDh@e4IYO9k_QzE1
 R2
 !s105 MyTestbench_sv_unit
 S1
 R4
-w1765798361
+w1765806915
 8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv
 FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv
 L0 3
@@ -483,7 +483,7 @@ R8
 r1
 !s85 0
 31
-R9
+R19
 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv|
 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv|
 !i113 1
@@ -516,7 +516,7 @@ R12
 R13
 vspi_slave
 R0
-R1
+R14
 !i10b 1
 !s100 LD07[>W@GY2ZRJDYAG=mD2
 IL2Rf]`Kl]7o[CBFW<z?3m3
@@ -532,7 +532,7 @@ R8
 r1
 !s85 0
 31
-R9
+R19
 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv|
 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv|
 !i113 1

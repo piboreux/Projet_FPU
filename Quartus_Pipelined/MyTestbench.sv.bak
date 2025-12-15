@@ -12,11 +12,10 @@ module MyTestbench();
   logic        tb_MemWrite;
   logic [31:0] tb_ReadData;
 
-  // GPIO wires - séparation totale entrée/sortie
-  logic [33:0] gpio_0_to_dut;     // Testbench ? DUT
-  wire  [33:0] gpio_0_from_dut;   // DUT ? Testbench
-  logic [33:0] gpio_1_to_dut;     // Testbench ? DUT
-  logic [12:0] gpio_2_to_dut;     // Testbench ? DUT
+  // GPIO wires - TOUS en wire pour les ports inout
+  wire [33:0] GPIO_0_PI;
+  wire [33:0] GPIO_1;
+  wire [12:0] GPIO_2;
 
   integer f;
   logic test_running;
@@ -24,26 +23,25 @@ module MyTestbench();
   // Instantiate device under test
   MyDE0_Nano dut(
     .CLOCK_50(clk), 
-    .GPIO_0_PI(gpio_0_from_dut),   // Sortie uniquement
-    .GPIO_1(gpio_1_to_dut),         // Entrée uniquement
-    .GPIO_2(gpio_2_to_dut)          // Entrée uniquement
+    .GPIO_0_PI(GPIO_0_PI),
+    .GPIO_1(GPIO_1),  
+    .GPIO_2(GPIO_2)
   );
 
-  // ============ CONNEXIONS SANS CONFLIT ============
-  // Entrées au DUT
-  assign gpio_1_to_dut[33]   = tb_MemWrite;
-  assign gpio_1_to_dut[31:0] = tb_WriteData;
-  assign gpio_1_to_dut[32]   = 1'b0;
+  // ============ CONNEXIONS ============
+  // Entrées au DUT via GPIO_1 et GPIO_2
+  assign GPIO_1[33]   = tb_MemWrite;
+  assign GPIO_1[31:0] = tb_WriteData;
+  assign GPIO_1[32]   = 1'b0;
   
-  assign gpio_2_to_dut = tb_DataAdr;
-  
-  // Reset sur un GPIO séparé (pas utilisé par SPI)
-  assign gpio_0_to_dut[0] = reset;
-  assign gpio_0_to_dut[33:1] = 33'b0;  // Reste à 0
+  assign GPIO_2 = tb_DataAdr;
 
-  // Sortie du DUT ? Testbench
-  assign tb_ReadData = gpio_0_from_dut[32:1];
-  // ================================================
+  // Sortie du DUT via GPIO_0_PI
+  assign tb_ReadData = GPIO_0_PI[32:1];
+  
+  // Reset (non utilisé en mode testbench, mais assigné à 0)
+  assign GPIO_0_PI[0] = 1'b0;
+  // ====================================
 
   // Initialize test
   initial begin
@@ -55,7 +53,7 @@ module MyTestbench();
     tb_DataAdr   = 0;
     tb_WriteData = 0;
     
-    // Reset
+    // Reset interne (pas utilisé car le DUT ignore le reset en mode testbench)
     reset = 1; 
     #20; 
     reset = 0; 
@@ -78,12 +76,12 @@ module MyTestbench();
     tb_MemWrite  = 1;
     $display("Time %0t: Writing B=20 to 0x604", $time);
 
-    // Écrire CMD = 1
+    // Écrire CMD = 1 (addition)
     @(negedge clk);
     tb_DataAdr   = 13'h0608;
     tb_WriteData = 32'd1;
     tb_MemWrite  = 1;
-    $display("Time %0t: Writing CMD=1 to 0x608", $time);
+    $display("Time %0t: Writing CMD=1 (ADD) to 0x608", $time);
 
     // Arrêter écriture
     @(negedge clk);
@@ -93,7 +91,7 @@ module MyTestbench();
     repeat(3) @(negedge clk);
 
     // Lire résultat
-    tb_DataAdr   = 13'h060C;
+    tb_DataAdr = 13'h060C;
     @(negedge clk);
     #1;  // Délai pour propagation combinatoire
     
@@ -102,10 +100,12 @@ module MyTestbench();
     
     // Vérification
     if (tb_ReadData === 32'd30) begin
+        $display("========================================");
         $display("*** TEST PASSED ***");
+        $display("========================================");
         $fwrite(f, "*** TEST PASSED ***\n");
     end else if (tb_ReadData === 32'bx || tb_ReadData === 32'bz) begin
-        $display("*** TEST FAILED - ReadData is undefined (X or Z) ***");
+        $display("*** TEST FAILED - ReadData is undefined ***");
         $fwrite(f, "*** TEST FAILED - ReadData is X/Z ***\n");
     end else begin
         $display("*** TEST FAILED - Expected 30, got %d ***", tb_ReadData);
