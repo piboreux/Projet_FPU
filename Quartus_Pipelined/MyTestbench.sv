@@ -12,12 +12,13 @@ module MyTestbench();
   logic        tb_MemWrite;
   logic [31:0] tb_ReadData;
 
-  // GPIO wires
+  // GPIO wires - TOUS en wire pour les ports inout
   wire [33:0] GPIO_0_PI;
   wire [33:0] GPIO_1;
   wire [12:0] GPIO_2;
 
   integer f;
+  logic test_running;
 
   // Instantiate device under test
   MyDE0_Nano dut(
@@ -27,21 +28,24 @@ module MyTestbench();
     .GPIO_2(GPIO_2)
   );
 
-  // ============ CONNEXIONS CORRIGÉES ============
-  // Reset sur bit isolé
-  assign GPIO_0_PI[0] = reset;
+  // ============ CONNEXIONS ============
+  // Entrées au DUT via GPIO_1 et GPIO_2
+  assign GPIO_1[33]   = tb_MemWrite;
+  assign GPIO_1[31:0] = tb_WriteData;
+  assign GPIO_1[32]   = 1'b0;
   
-  // SORTIES du testbench ? ENTRÉES du DUT
-  assign GPIO_1[33]    = tb_MemWrite;
-  assign GPIO_1[31:0]  = tb_WriteData;
-  assign GPIO_2        = tb_DataAdr;
+  assign GPIO_2 = tb_DataAdr;
 
-  // ENTRÉE du testbench ? SORTIE du DUT (bits [33:2] pour données 32-bit)
-  assign tb_ReadData = {GPIO_0_PI[33:2]};
-  // =============================================
+  // Sortie du DUT via GPIO_0_PI
+  assign tb_ReadData = GPIO_0_PI[32:1];
+  
+  // Reset (non utilisé en mode testbench, mais assigné à 0)
+  assign GPIO_0_PI[0] = 1'b0;
+  // ====================================
 
   // Initialize test
   initial begin
+    test_running = 1;
     f = $fopen("student_simul.txt", "w");
     
     // Initialiser
@@ -49,13 +53,14 @@ module MyTestbench();
     tb_DataAdr   = 0;
     tb_WriteData = 0;
     
-    // Reset
+    // Reset interne (pas utilisé car le DUT ignore le reset en mode testbench)
     reset = 1; 
     #20; 
     reset = 0; 
     #20;
     
     $display("=== Starting FPU Test ===");
+    $fwrite(f, "=== Starting FPU Test ===\n");
 
     // Écrire A = 10
     @(negedge clk);
@@ -71,38 +76,46 @@ module MyTestbench();
     tb_MemWrite  = 1;
     $display("Time %0t: Writing B=20 to 0x604", $time);
 
-    // Écrire CMD = 1
+    // Écrire CMD = 1 (addition)
     @(negedge clk);
     tb_DataAdr   = 13'h0608;
     tb_WriteData = 32'd1;
     tb_MemWrite  = 1;
-    $display("Time %0t: Writing CMD=1 to 0x608", $time);
+    $display("Time %0t: Writing CMD=1 (ADD) to 0x608", $time);
 
-    // Arrêter écriture et attendre calcul
+    // Arrêter écriture
     @(negedge clk);
     tb_MemWrite  = 0;
     
-    @(negedge clk);
+    // Attendre que le calcul se fasse
+    repeat(3) @(negedge clk);
 
     // Lire résultat
-    tb_DataAdr   = 13'h060C;
+    tb_DataAdr = 13'h060C;
     @(negedge clk);
+    #1;  // Délai pour propagation combinatoire
     
-    // Attendre propagation combinatoire
-    #2;
-    
-    $display("Time %0t: FPU result = %d (expected 30)", $time, tb_ReadData);
-    $fwrite(f, "FPU result: %d\n", tb_ReadData);
+    $display("Time %0t: tb_ReadData = %d (expected 30)", $time, tb_ReadData);
+    $fwrite(f, "\nFPU result: %d\n", tb_ReadData);
     
     // Vérification
-    if (tb_ReadData == 32'd30) begin
-        $display("??? TEST PASSED ???");
+    if (tb_ReadData === 32'd30) begin
+        $display("========================================");
+        $display("*** TEST PASSED ***");
+        $display("========================================");
+        $fwrite(f, "*** TEST PASSED ***\n");
+    end else if (tb_ReadData === 32'bx || tb_ReadData === 32'bz) begin
+        $display("*** TEST FAILED - ReadData is undefined ***");
+        $fwrite(f, "*** TEST FAILED - ReadData is X/Z ***\n");
     end else begin
-        $display("??? TEST FAILED ??? - Expected 30, got %d", tb_ReadData);
+        $display("*** TEST FAILED - Expected 30, got %d ***", tb_ReadData);
+        $fwrite(f, "*** TEST FAILED - Expected 30, got %d ***\n", tb_ReadData);
     end
 
     #100;
     $display("=== Test Complete ===");
+    
+    test_running = 0;
     $fclose(f);
     $stop;
   end
@@ -115,7 +128,7 @@ module MyTestbench();
 
   // Log
   always @(negedge clk) begin
-    if (reset == 0) begin
+    if (test_running && reset == 0) begin
       $fwrite(f, "Time=%0t Addr=%h WData=%d RData=%d WE=%b\n", 
               $time, tb_DataAdr, tb_WriteData, tb_ReadData, tb_MemWrite);
     end

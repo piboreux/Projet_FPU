@@ -1,19 +1,24 @@
 Time=25 Addr=0000 WData=         0 RData=         x WE=0
 Time=35 Addr=0000 WData=         0 RData=         x WE=0
+=== Starting FPU Test ===
 Time=45 Addr=0000 WData=         0 RData=         x WE=0
-Time=55 Addr=0600 WData=        10 RData=         X WE=1
-Time=65 Addr=0604 WData=        20 RData=         X WE=1
-Time=75 Addr=0608 WData=         1 RData=         X WE=1
-Time=85 Addr=0608 WData=         1 RData=         X WE=0
-Time=95 Addr=060c WData=         1 RData=         X WE=0
-FPU result:          X
-Time=105 Addr=060c WData=         1 RData=         X WE=0
-Time=115 Addr=060c WData=         1 RData=         X WE=0
-Time=125 Addr=060c WData=         1 RData=         X WE=0
-Time=135 Addr=060c WData=         1 RData=         X WE=0
-Time=145 Addr=060c WData=         1 RData=         X WE=0
-Time=155 Addr=060c WData=         1 RData=         X WE=0
-Time=165 Addr=060c WData=         1 RData=         X WE=0
-Time=175 Addr=060c WData=         1 RData=         X WE=0
-Time=185 Addr=060c WData=         1 RData=         X WE=0
-Time=195 Addr=060c WData=         1 RData=         X WE=0
+Time=55 Addr=0600 WData=        10 RData=         x WE=1
+Time=65 Addr=0604 WData=        20 RData=         x WE=1
+Time=75 Addr=0608 WData=         1 RData=        30 WE=1
+Time=85 Addr=0608 WData=         1 RData=        30 WE=0
+Time=95 Addr=0608 WData=         1 RData=        30 WE=0
+Time=105 Addr=0608 WData=         1 RData=        30 WE=0
+Time=115 Addr=060c WData=         1 RData=        30 WE=0
+
+FPU result:         30
+*** TEST PASSED ***
+Time=125 Addr=060c WData=         1 RData=        30 WE=0
+Time=135 Addr=060c WData=         1 RData=        30 WE=0
+Time=145 Addr=060c WData=         1 RData=        30 WE=0
+Time=155 Addr=060c WData=         1 RData=        30 WE=0
+Time=165 Addr=060c WData=         1 RData=        30 WE=0
+Time=175 Addr=060c WData=         1 RData=        30 WE=0
+Time=185 Addr=060c WData=         1 RData=        30 WE=0
+Time=195 Addr=060c WData=         1 RData=        30 WE=0
+Time=205 Addr=060c WData=         1 RData=        30 WE=0
+Time=215 Addr=060c WData=         1 RData=        30 WE=0

@@ -12,39 +12,42 @@ module MyTestbench();
   logic        tb_MemWrite;
   logic [31:0] tb_ReadData;
 
-  // GPIO wires - connexions explicites
-  logic [33:0] gpio_0_out;  // Sortie du DUT
-  logic [33:0] gpio_0_in;   // Entrée au DUT
-  logic [33:0] gpio_1_in;
-  logic [12:0] gpio_2_in;
+  // GPIO wires - séparation totale entrée/sortie
+  logic [33:0] gpio_0_to_dut;     // Testbench ? DUT
+  wire  [33:0] gpio_0_from_dut;   // DUT ? Testbench
+  logic [33:0] gpio_1_to_dut;     // Testbench ? DUT
+  logic [12:0] gpio_2_to_dut;     // Testbench ? DUT
 
   integer f;
+  logic test_running;
 
   // Instantiate device under test
   MyDE0_Nano dut(
     .CLOCK_50(clk), 
-    .GPIO_0_PI(gpio_0_in),
-    .GPIO_1(gpio_1_in),  
-    .GPIO_2(gpio_2_in)
+    .GPIO_0_PI(gpio_0_from_dut),   // Sortie uniquement
+    .GPIO_1(gpio_1_to_dut),         // Entrée uniquement
+    .GPIO_2(gpio_2_to_dut)          // Entrée uniquement
   );
 
-  // ============ CONNEXIONS SIMPLIFIÉES ============
+  // ============ CONNEXIONS SANS CONFLIT ============
   // Entrées au DUT
-  assign gpio_0_in[0] = reset;
-  assign gpio_0_in[33:1] = 33'bz;  // Le DUT pilote ces bits en sortie
+  assign gpio_1_to_dut[33]   = tb_MemWrite;
+  assign gpio_1_to_dut[31:0] = tb_WriteData;
+  assign gpio_1_to_dut[32]   = 1'b0;
   
-  assign gpio_1_in[33] = tb_MemWrite;
-  assign gpio_1_in[31:0] = tb_WriteData;
-  assign gpio_1_in[32] = 1'b0;
+  assign gpio_2_to_dut = tb_DataAdr;
   
-  assign gpio_2_in = tb_DataAdr;
+  // Reset sur un GPIO séparé (pas utilisé par SPI)
+  assign gpio_0_to_dut[0] = reset;
+  assign gpio_0_to_dut[33:1] = 33'b0;  // Reste à 0
 
-  // Sortie du DUT - Lecture via gpio_0_in (qui est inout)
-  assign tb_ReadData = gpio_0_in[32:1];
-  // =============================================
+  // Sortie du DUT ? Testbench
+  assign tb_ReadData = gpio_0_from_dut[32:1];
+  // ================================================
 
   // Initialize test
   initial begin
+    test_running = 1;
     f = $fopen("student_simul.txt", "w");
     
     // Initialiser
@@ -59,6 +62,7 @@ module MyTestbench();
     #20;
     
     $display("=== Starting FPU Test ===");
+    $fwrite(f, "=== Starting FPU Test ===\n");
 
     // Écrire A = 10
     @(negedge clk);
@@ -85,30 +89,33 @@ module MyTestbench();
     @(negedge clk);
     tb_MemWrite  = 0;
     
-    @(negedge clk);
+    // Attendre que le calcul se fasse
+    repeat(3) @(negedge clk);
 
     // Lire résultat
     tb_DataAdr   = 13'h060C;
     @(negedge clk);
+    #1;  // Délai pour propagation combinatoire
     
-    // Attendre propagation
-    #2;
-    
-    $display("Time %0t: tb_ReadData = %d (raw = %h)", $time, tb_ReadData, tb_ReadData);
-    $display("Time %0t: FPU result = %d (expected 30)", $time, tb_ReadData);
-    $fwrite(f, "FPU result: %d\n", tb_ReadData);
+    $display("Time %0t: tb_ReadData = %d (expected 30)", $time, tb_ReadData);
+    $fwrite(f, "\nFPU result: %d\n", tb_ReadData);
     
     // Vérification
     if (tb_ReadData === 32'd30) begin
         $display("*** TEST PASSED ***");
-    end else if (tb_ReadData === 32'bx) begin
-        $display("*** TEST FAILED - ReadData is X ***");
+        $fwrite(f, "*** TEST PASSED ***\n");
+    end else if (tb_ReadData === 32'bx || tb_ReadData === 32'bz) begin
+        $display("*** TEST FAILED - ReadData is undefined (X or Z) ***");
+        $fwrite(f, "*** TEST FAILED - ReadData is X/Z ***\n");
     end else begin
         $display("*** TEST FAILED - Expected 30, got %d ***", tb_ReadData);
+        $fwrite(f, "*** TEST FAILED - Expected 30, got %d ***\n", tb_ReadData);
     end
 
     #100;
     $display("=== Test Complete ===");
+    
+    test_running = 0;
     $fclose(f);
     $stop;
   end
@@ -121,7 +128,7 @@ module MyTestbench();
 
   // Log
   always @(negedge clk) begin
-    if (reset == 0) begin
+    if (test_running && reset == 0) begin
       $fwrite(f, "Time=%0t Addr=%h WData=%d RData=%d WE=%b\n", 
               $time, tb_DataAdr, tb_WriteData, tb_ReadData, tb_MemWrite);
     end

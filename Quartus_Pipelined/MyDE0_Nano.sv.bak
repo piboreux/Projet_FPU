@@ -1,3 +1,7 @@
+//=======================================================
+//  MyDE0_Nano - top module for ARM + FPU + Memories + SPI
+//=======================================================
+
 module MyDE0_Nano(
 
 //////////// CLOCK //////////
@@ -46,11 +50,11 @@ input logic                 ADC_SDAT,
 inout logic     [12:0]      GPIO_2,
 input logic      [2:0]      GPIO_2_IN,
 
-//////////// GPIO_0 //////////
+//////////// GPIO_0, GPIO_0 connect to GPIO Default //////////
 inout logic     [33:0]      GPIO_0_PI,
 input logic      [1:0]      GPIO_0_PI_IN,
 
-//////////// GPIO_1 //////////
+//////////// GPIO_1, GPIO_1 connect to GPIO Default //////////
 inout logic     [33:0]      GPIO_1,
 input logic      [1:0]      GPIO_1_IN
 );
@@ -58,7 +62,7 @@ input logic      [1:0]      GPIO_1_IN
     //=======================================================
     // MODE SELECTION
     //=======================================================
-    parameter TESTBENCH_MODE = 1;
+    parameter TESTBENCH_MODE = 1;  // 1 = testbench, 0 = ARM processor
     
     //=======================================================
     // Internal signals
@@ -73,6 +77,7 @@ input logic      [1:0]      GPIO_1_IN
     logic [31:0] spi_data;
     logic [31:0] fpu_data_out;
     
+    // Signaux ARM
     logic [31:0] ARM_DataAdrM, ARM_WriteDataM;
     logic        ARM_MemWriteM;
     
@@ -112,14 +117,16 @@ input logic      [1:0]      GPIO_1_IN
     );
     
     //=======================================================
-    // MODE MUX
+    // MODE MUX - TESTBENCH vs ARM
     //=======================================================
     generate
         if (TESTBENCH_MODE) begin : tb_mode
+            // Mode testbench : signaux viennent de GPIO
             assign MemWriteM  = GPIO_1[33];
             assign WriteDataM = GPIO_1[31:0];
             assign DataAdrM   = {19'b0, GPIO_2[12:0]};
         end else begin : arm_mode
+            // Mode ARM : signaux viennent du processeur
             assign MemWriteM  = ARM_MemWriteM;
             assign WriteDataM = ARM_WriteDataM;
             assign DataAdrM   = ARM_DataAdrM;
@@ -129,10 +136,10 @@ input logic      [1:0]      GPIO_1_IN
     //=======================================================
     // Chip Select logic
     //=======================================================
-    assign cs_dmem = ~DataAdrM[11] & ~DataAdrM[10];
-    assign cs_spi  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] & ~DataAdrM[8];
-    assign cs_led  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] &  DataAdrM[8];
-    assign cs_fpu  = ~DataAdrM[11] &  DataAdrM[10] &  DataAdrM[9] & ~DataAdrM[8];
+    assign cs_dmem = ~DataAdrM[11] & ~DataAdrM[10];                            // 0x0000 - 0x03FF
+    assign cs_spi  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] & ~DataAdrM[8];  // 0x0400 - 0x04FF
+    assign cs_led  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] &  DataAdrM[8];  // 0x0500 - 0x05FF
+    assign cs_fpu  = ~DataAdrM[11] &  DataAdrM[10] &  DataAdrM[9] & ~DataAdrM[8];  // 0x0600 - 0x06FF
     
     //=======================================================
     // Read Data Mux
@@ -154,11 +161,11 @@ input logic      [1:0]      GPIO_1_IN
             led_reg <= WriteDataM[7:0];
     
     //=======================================================
-    // GPIO Testbench Interface - ARCHITECTURE PROPRE
+    // GPIO Testbench Interface
     //=======================================================
-    // GPIO_0_PI[0]     : reset (INPUT du testbench)
+    // GPIO_0_PI[0]     : reset (INPUT depuis testbench)
     // GPIO_0_PI[32:1]  : ReadDataM (OUTPUT vers testbench)
-    // GPIO_0_PI[33]    : spare
+    // GPIO_0_PI[33]    : non utilisé
     
     assign GPIO_0_PI[32:1] = ReadDataM;
     assign GPIO_0_PI[33] = 1'b0;
@@ -188,20 +195,29 @@ input logic      [1:0]      GPIO_1_IN
 endmodule
 
 //=======================================================
-// Memories
+// Data Memory
 //=======================================================
 module dmem(input logic clk, we, cs,
             input logic [31:0] a, wd,
             output logic [31:0] rd);
+
     logic [31:0] RAM[255:0];
-    assign rd = RAM[a[31:2]];
+
+    assign rd = RAM[a[31:2]]; // word aligned
+
     always_ff @(posedge clk)
-        if (cs & we) RAM[a[31:2]] <= wd;
+        if (cs & we)
+            RAM[a[31:2]] <= wd;
 endmodule
 
+//=======================================================
+// Instruction Memory
+//=======================================================
 module imem(input logic [31:0] a,
             output logic [31:0] rd);
+
     logic [31:0] RAM[255:0];
+
     initial $readmemh("MyProgram_Pipelined.hex", RAM);
-    assign rd = RAM[a[31:2]];
+    assign rd = RAM[a[31:2]]; // word aligned
 endmodule

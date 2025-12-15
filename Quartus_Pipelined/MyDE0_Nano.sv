@@ -1,3 +1,7 @@
+//=======================================================
+//  MyDE0_Nano
+//=======================================================
+
 module MyDE0_Nano(
 
 //////////// CLOCK //////////
@@ -77,10 +81,19 @@ input logic      [1:0]      GPIO_1_IN
     logic        ARM_MemWriteM;
     
     //=======================================================
-    // Clock and reset - CORRIGÉ
+    // Clock and reset - MODE DEPENDENT
     //=======================================================
-    assign clk   = CLOCK_50;
-    assign reset = GPIO_0_PI[0];  // ? bit[0] au lieu de bit[1]
+    assign clk = CLOCK_50;
+    
+    generate
+        if (TESTBENCH_MODE) begin : tb_reset
+            // En mode testbench, reset est toujours 0 (pas de reset externe)
+            assign reset = 1'b0;
+        end else begin : arm_reset
+            // En mode ARM, utiliser le GPIO
+            assign reset = GPIO_0_PI[0];
+        end
+    endgenerate
   
     //=======================================================
     // Instantiate ARM processor and memories
@@ -118,7 +131,7 @@ input logic      [1:0]      GPIO_1_IN
         if (TESTBENCH_MODE) begin : tb_mode
             assign MemWriteM  = GPIO_1[33];
             assign WriteDataM = GPIO_1[31:0];
-            assign DataAdrM   = {19'b0, GPIO_2};
+            assign DataAdrM   = {19'b0, GPIO_2[12:0]};
         end else begin : arm_mode
             assign MemWriteM  = ARM_MemWriteM;
             assign WriteDataM = ARM_WriteDataM;
@@ -154,35 +167,40 @@ input logic      [1:0]      GPIO_1_IN
             led_reg <= WriteDataM[7:0];
     
     //=======================================================
-    // GPIO Testbench Interface - CORRIGÉ
+    // GPIO Testbench Interface - SORTIE UNIQUEMENT
     //=======================================================
-    // Sortie vers testbench sur bits [33:2]
-    assign GPIO_0_PI[33:2] = ReadDataM;
-    // bit[0] est le reset (entrée)
-    // bit[1] peut rester non connecté ou à z
-    assign GPIO_0_PI[1] = 1'bz;
+    assign GPIO_0_PI[32:1] = ReadDataM;
+    assign GPIO_0_PI[33] = 1'b0;
+    // GPIO_0_PI[0] non piloté en mode testbench
     
     //=======================================================
-    // SPI
+    // SPI (éviter conflit avec testbench)
     //=======================================================
-    logic spi_clk, spi_cs, spi_mosi, spi_miso;
+    generate
+        if (!TESTBENCH_MODE) begin : spi_enabled
+            logic spi_clk, spi_cs, spi_mosi, spi_miso;
 
-    spi_slave spi_slave_instance(
-        .SPI_CLK    (spi_clk),
-        .SPI_CS     (spi_cs),
-        .SPI_MOSI   (spi_mosi),
-        .SPI_MISO   (spi_miso),
-        .Data_WE    (MemWriteM & cs_spi),
-        .Data_Addr  (DataAdrM),
-        .Data_Write (WriteDataM),
-        .Data_Read  (spi_data),
-        .Clk        (clk)
-    );
+            spi_slave spi_slave_instance(
+                .SPI_CLK    (spi_clk),
+                .SPI_CS     (spi_cs),
+                .SPI_MOSI   (spi_mosi),
+                .SPI_MISO   (spi_miso),
+                .Data_WE    (MemWriteM & cs_spi),
+                .Data_Addr  (DataAdrM),
+                .Data_Write (WriteDataM),
+                .Data_Read  (spi_data),
+                .Clk        (clk)
+            );
 
-    assign spi_clk  = GPIO_0_PI[11];
-    assign spi_cs   = GPIO_0_PI[9];
-    assign spi_mosi = GPIO_0_PI[15];
-    assign GPIO_0_PI[13] = spi_cs ? 1'bz : spi_miso;
+            assign spi_clk  = GPIO_0_PI[11];
+            assign spi_cs   = GPIO_0_PI[9];
+            assign spi_mosi = GPIO_0_PI[15];
+            assign GPIO_0_PI[13] = spi_cs ? 1'bz : spi_miso;
+        end else begin : spi_disabled
+            // En mode testbench, pas de SPI
+            assign spi_data = 32'b0;
+        end
+    endgenerate
 
 endmodule
 
@@ -201,6 +219,10 @@ endmodule
 module imem(input logic [31:0] a,
             output logic [31:0] rd);
     logic [31:0] RAM[255:0];
-    initial $readmemh("MyProgram_Pipelined.hex", RAM);
+    initial begin
+        // Initialiser avec des NOPs si le fichier n'existe pas
+        for (int i = 0; i < 256; i++) RAM[i] = 32'hE320F000;  // NOP
+        $readmemh("MyProgram_Pipelined.hex", RAM);
+    end
     assign rd = RAM[a[31:2]];
 endmodule
