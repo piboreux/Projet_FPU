@@ -1,0 +1,17 @@
+# Quartus generated files
+Quartus_Pipelined/db/
+Quartus_Pipelined/incremental_db/
+Quartus_Pipelined/simulation/
+Quartus_Pipelined/output_files/
+
+*.rpt
+*.summary
+*.smsg
+*.done
+*.jdi
+*.pin
+*.sof
+*.cdf
+*.sld
+*.asm.rpt
+*.mif_update.rpt

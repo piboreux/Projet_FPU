@@ -62,7 +62,7 @@ input logic      [1:0]      GPIO_1_IN
     //=======================================================
     // MODE SELECTION
     //=======================================================
-    parameter TESTBENCH_MODE = 1;
+    parameter TESTBENCH_MODE = 0;
     
     //=======================================================
     // Internal signals
@@ -169,12 +169,20 @@ input logic      [1:0]      GPIO_1_IN
     //=======================================================
     // GPIO Testbench Interface - SORTIE UNIQUEMENT
     //=======================================================
-    assign GPIO_0_PI[32:1] = ReadDataM;
-    assign GPIO_0_PI[33] = 1'b0;
-    // GPIO_0_PI[0] non piloté en mode testbench
+    generate
+        if (TESTBENCH_MODE) begin
+            assign GPIO_0_PI[32:1] = ReadDataM;
+            assign GPIO_0_PI[33]   = 1'b0;
+        end else begin
+            assign GPIO_0_PI[32:1] = 32'bz;
+            assign GPIO_0_PI[33]   = 1'bz;
+        end
+    endgenerate
+
+    // GPIO_0_PI[0] non pilotï¿½ en mode testbench
     
     //=======================================================
-    // SPI (éviter conflit avec testbench)
+    // SPI (ï¿½viter conflit avec testbench)
     //=======================================================
     generate
         if (!TESTBENCH_MODE) begin : spi_enabled

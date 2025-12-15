@@ -1,32 +1,54 @@
 /************* CODE SECTION *************/
-@Name Here
-.text   @ the following is executable assembly
+@ FPU Test Program
+.text
 
-@ Ensure code section is 4-byte aligned:
 .balign 4
-
-@ main is the entry point and must be global
 .global main
 
-B main          @ begin at main
+B main
 .balign 128
 
 /************* MAIN SECTION *************/
 
 main:
-	SUB R0, R15, R15 	@ R0 = 0
-	STR R0, [R0, #0x500]    @ Clear the LED
-	LDR R1, [R0, #0x400]    @ Load value A from SPI transfer in R1
-	LDR R2, [R0, #0x404]    @ Load value B from SPI transfer in R2
-	CMP R1, #0		@ If A=0
-	BEQ GCD_Done    
-	CMP R2, #0		@ If B=0
-	BEQ GCD_Done   
+    SUB R0, R15, R15          @ R0 = 0 (base address)
 
-GCD_Loop       
-        B GCD_Done              @ YOU NEED TO MODIFY THIS SECTION
-    
-GCD_Done		        
-        STR R1, [R0, #0x408] 	@ CGD=R1=R2, send back through SPI
-  			 	@ Display the GCD on the LEDs, YOU NEED TO ADD AN INSTRUCTION
-.end     @ end of code
+    STR R0, [R0, #0x500]      @ Clear LEDs
+
+    @-----------------------------------
+    @ Read operands and opcode from SPI
+    @-----------------------------------
+    LDR R1, [R0, #0x400]      @ R1 = Operand A
+    LDR R2, [R0, #0x404]      @ R2 = Operand B
+    LDR R3, [R0, #0x408]      @ R3 = Opcode (1=ADD,2=SUB,3=MUL)
+
+    @-----------------------------------
+    @ Write operands to FPU
+    @-----------------------------------
+    STR R1, [R0, #0x600]      @ FPU Operand A
+    STR R2, [R0, #0x604]      @ FPU Operand B
+
+    @-----------------------------------
+    @ Launch computation
+    @-----------------------------------
+    STR R3, [R0, #0x608]      @ FPU Command (executes)
+
+    @-----------------------------------
+    @ Read FPU result
+    @-----------------------------------
+    LDR R4, [R0, #0x60C]      @ R4 = FPU Result
+
+    @-----------------------------------
+    @ Send result back via SPI
+    @-----------------------------------
+    STR R4, [R0, #0x40C]      @ SPI output register
+
+    @-----------------------------------
+    @ Display result (LSB only) on LEDs
+    @-----------------------------------
+    STR R4, [R0, #0x500]
+
+end:
+    B end                     @ Infinite loop
+
+.end

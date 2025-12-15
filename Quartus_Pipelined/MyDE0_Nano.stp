@@ -4,19 +4,7 @@
   </display_tree>
   <instance enabled="true" entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
-    <position_info>
-      <single attribute="active tab" value="1"/>
-      <single attribute="data horizontal scroll position" value="0"/>
-      <single attribute="data vertical scroll position" value="0"/>
-      <single attribute="setup horizontal scroll position" value="0"/>
-      <single attribute="setup vertical scroll position" value="0"/>
-      <single attribute="zoom level denominator" value="1"/>
-      <single attribute="zoom level numerator" value="1"/>
-      <single attribute="zoom offset denominator" value="1"/>
-      <single attribute="zoom offset numerator" value="130944"/>
-      <multi attribute="timebars" size="1" value="113"/>
-    </position_info>
-    <signal_set global_temp="1" name="signal_set: 2025/12/14 18:55:35  #0">
+    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2025/12/14 18:55:35  #0">
       <clock name="CLOCK_50" polarity="posedge" tap_mode="probeonly"/>
       <config pipeline_level="0" ram_type="AUTO" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="8192" trigger_in_enable="no" trigger_out_enable="no"/>
       <top_entity/>
@@ -45,33 +33,33 @@
       </signal_vec>
       <presentation>
         <unified_setup_data_view>
-          <node duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="spi_slave:spi_slave_instance|SPI_MISO" tap_mode="probeonly" type="register"/>
-          <node duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[11]~input" tap_mode="probeonly" type="combinatorial"/>
-          <node duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[15]~input" tap_mode="probeonly" type="combinatorial"/>
-          <node duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[1]~input" tap_mode="probeonly" type="combinatorial"/>
-          <node duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[9]~input" tap_mode="probeonly" type="combinatorial"/>
+          <node data_index="4" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="spi_slave:spi_slave_instance|SPI_MISO" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="4" tap_mode="probeonly" trigger_index="4" type="unknown"/>
+          <node data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[11]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="probeonly" trigger_index="0" type="unknown"/>
+          <node data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[15]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="probeonly" trigger_index="1" type="unknown"/>
+          <node data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[1]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="probeonly" trigger_index="2" type="unknown"/>
+          <node data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="true" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="GPIO_0_PI[9]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="3" tap_mode="probeonly" trigger_index="3" type="unknown"/>
         </unified_setup_data_view>
         <data_view>
-          <net data_index="4" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="spi_slave:spi_slave_instance|SPI_MISO" storage_index="4" tap_mode="probeonly" trigger_index="4" type="unknown"/>
-          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[11]~input" storage_index="0" tap_mode="probeonly" trigger_index="0" type="unknown"/>
-          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[15]~input" storage_index="1" tap_mode="probeonly" trigger_index="1" type="unknown"/>
-          <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[1]~input" storage_index="2" tap_mode="probeonly" trigger_index="2" type="unknown"/>
-          <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[9]~input" storage_index="3" tap_mode="probeonly" trigger_index="3" type="unknown"/>
+          <net data_index="4" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="spi_slave:spi_slave_instance|SPI_MISO" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="4" tap_mode="probeonly" trigger_index="4" type="unknown"/>
+          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[11]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="probeonly" trigger_index="0" type="unknown"/>
+          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[15]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="probeonly" trigger_index="1" type="unknown"/>
+          <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[1]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="probeonly" trigger_index="2" type="unknown"/>
+          <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="true" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="GPIO_0_PI[9]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="3" tap_mode="probeonly" trigger_index="3" type="unknown"/>
         </data_view>
         <setup_view>
-          <net data_index="4" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="spi_slave:spi_slave_instance|SPI_MISO" storage_index="4" tap_mode="probeonly" trigger_index="4" type="unknown"/>
-          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[11]~input" storage_index="0" tap_mode="probeonly" trigger_index="0" type="unknown"/>
-          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[15]~input" storage_index="1" tap_mode="probeonly" trigger_index="1" type="unknown"/>
-          <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[1]~input" storage_index="2" tap_mode="probeonly" trigger_index="2" type="unknown"/>
-          <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="true" is_selected="false" is_storage_input="true" is_trigger_input="true" name="GPIO_0_PI[9]~input" storage_index="3" tap_mode="probeonly" trigger_index="3" type="unknown"/>
+          <net data_index="4" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="spi_slave:spi_slave_instance|SPI_MISO" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="4" tap_mode="probeonly" trigger_index="4" type="unknown"/>
+          <net data_index="0" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[11]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="0" tap_mode="probeonly" trigger_index="0" type="unknown"/>
+          <net data_index="1" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[15]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="1" tap_mode="probeonly" trigger_index="1" type="unknown"/>
+          <net data_index="2" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="false" is_storage_input="true" is_trigger_input="true" level-0="dont_care" name="GPIO_0_PI[1]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="2" tap_mode="probeonly" trigger_index="2" type="unknown"/>
+          <net data_index="3" duplicate_name_allowed="false" is_data_input="true" is_node_valid="false" is_selected="true" is_storage_input="true" is_trigger_input="true" level-0="falling edge" name="GPIO_0_PI[9]~input" pwr_level-0="dont_care" pwr_storage-0="dont_care" pwr_storage-1="dont_care" pwr_storage-2="dont_care" storage-0="dont_care" storage-1="dont_care" storage-2="dont_care" storage_index="3" tap_mode="probeonly" trigger_index="3" type="unknown"/>
         </setup_view>
         <trigger_in_editor is_enabled="false"/>
         <trigger_out_editor/>
       </presentation>
-      <trigger attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2025/12/14 18:55:35  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
+      <trigger attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2025/12/15 21:51:17  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic">
+          <level enabled="yes" name="condition1" type="basic">'GPIO_0_PI[9]~input' == falling edge
             <power_up enabled="yes">
             </power_up>
             <op_node/>
@@ -99,6 +87,18 @@
         </storage_qualifier_events>
       </trigger>
     </signal_set>
+    <position_info>
+      <single attribute="active tab" value="1"/>
+      <single attribute="data horizontal scroll position" value="0"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="setup horizontal scroll position" value="160"/>
+      <single attribute="setup vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="1"/>
+      <single attribute="zoom offset denominator" value="1"/>
+      <single attribute="zoom offset numerator" value="130944"/>
+      <multi attribute="timebars" size="1" value="113"/>
+    </position_info>
   </instance>
   <mnemonics/>
   <static_plugin_mnemonics/>
@@ -1399,6 +1399,7 @@ ffb9fJMvXCT7AlXaX3mrFEl/uv7Y/T/86PLy8i9/enn5g89ffnH5F69+9GIz
 
     
     
+    
     </embedded_sof_file>
   </embedded_sof_files>
   <global_info>
@@ -1411,7 +1412,7 @@ ffb9fJMvXCT7AlXaX3mrFEl/uv7Y/T/86PLy8i9/enn5g89ffnH5F69+9GIz
     <single attribute="jtag widget visible" value="1"/>
     <single attribute="lock mode" value="0"/>
     <multi attribute="column width" size="23" value="34,34,648,74,68,503,464,96,98,98,88,143,175,101,101,101,101,101,101,101,101,240,78"/>
-    <multi attribute="frame size" size="2" value="3840,2019"/>
+    <multi attribute="frame size" size="2" value="1920,991"/>
     <multi attribute="jtag widget size" size="2" value="493,209"/>
   </global_info>
 </session>
