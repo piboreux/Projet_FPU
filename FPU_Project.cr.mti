@@ -1,0 +1,30 @@
+C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv {1 {vlog -work work -sv -stats=none C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module spi_slave
+
+Top level modules:
+	spi_slave
+
+} {} {}} C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv {1 {vlog -work work -sv -stats=none C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module arm
+-- Compiling module controller
+-- Compiling module conditional
+-- Compiling module datapath
+-- Compiling module hazard
+-- Compiling module regfile
+-- Compiling module extend
+-- Compiling module alu
+-- Compiling module adder
+-- Compiling module flopenr
+-- Compiling module flopr
+-- Compiling module flopenrc
+-- Compiling module floprc
+-- Compiling module mux2
+-- Compiling module mux3
+-- Compiling module eqcmp
+
+Top level modules:
+	arm
+
+} {} {}}

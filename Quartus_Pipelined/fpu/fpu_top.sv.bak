@@ -1,0 +1,81 @@
+//=======================================================
+// fpu_top.sv
+// Floating Point Unit - Top module
+// Supports add, sub, mul (single precision)
+// Compatible avec testbench adresses séparées
+//=======================================================
+
+module fpu_top(
+    input  logic        clk,
+    input  logic        reset,
+    input  logic        chip_select,
+    input  logic [12:0] addr,       // adresse de registre
+    input  logic [31:0] data_in,
+    output logic [31:0] data_out
+);
+
+    // Internal registers
+    logic [31:0] reg_A, reg_B;
+    logic [31:0] cmd;
+    logic [31:0] result;
+
+    // Write registers based on address
+    always_ff @(posedge clk or posedge reset) begin
+        if (reset) begin
+            reg_A  <= 32'b0;
+            reg_B  <= 32'b0;
+            cmd    <= 32'b0;
+            result <= 32'b0;
+        end else if (chip_select) begin
+            case(addr)
+                13'h0600: reg_A <= data_in;     // Operande A
+                13'h0604: reg_B <= data_in;     // Operande B
+                13'h0608: cmd   <= data_in;     // Commande (1=add, 2=sub, 3=mul)
+                default: ;
+            endcase
+
+            // Execute operation
+            if (cmd == 32'd1)       result <= fp_add(reg_A, reg_B);
+            else if (cmd == 32'd2)  result <= fp_sub(reg_A, reg_B);
+            else if (cmd == 32'd3)  result <= fp_mul(reg_A, reg_B);
+        end
+    end
+
+    // Read result at 0x060C
+    assign data_out = (addr == 13'h060C) ? result : 32'b0;
+
+    //===================================================
+    // Floating Point Operations (IEEE-754 single precision)
+    // Using SystemVerilog real type for simplicity
+    //===================================================
+    function automatic [31:0] fp_add(input [31:0] a, b);
+        real ra, rb, rr;
+        begin
+            ra = $bitstoreal(a);
+            rb = $bitstoreal(b);
+            rr = ra + rb;
+            fp_add = $realtobits(rr);
+        end
+    endfunction
+
+    function automatic [31:0] fp_sub(input [31:0] a, b);
+        real ra, rb, rr;
+        begin
+            ra = $bitstoreal(a);
+            rb = $bitstoreal(b);
+            rr = ra - rb;
+            fp_sub = $realtobits(rr);
+        end
+    endfunction
+
+    function automatic [31:0] fp_mul(input [31:0] a, b);
+        real ra, rb, rr;
+        begin
+            ra = $bitstoreal(a);
+            rb = $bitstoreal(b);
+            rr = ra * rb;
+            fp_mul = $realtobits(rr);
+        end
+    endfunction
+
+endmodule

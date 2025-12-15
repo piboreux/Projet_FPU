@@ -1,0 +1,540 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/PJ/Desktop/LELEC2531/Midterm/Code/Q3
+vadder
+Z0 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z1 !s110 1765766016
+!i10b 1
+!s100 CDQSEiFa[:iBPd?43OR0n0
+IoSc`8;I60GT>ZZGKzTi=E0
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+Z3 !s105 MyARM_Pipelined_sv_unit
+S1
+Z4 dC:/Users/PJ/Desktop/LELEC2531/Projet_FPU
+Z5 w1765765312
+Z6 8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv
+Z7 FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv
+L0 360
+Z8 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z9 !s108 1765766016.000000
+Z10 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv|
+Z11 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyARM_Pipelined.sv|
+!i113 1
+Z12 o-work work -sv
+Z13 tCvgOpt 0
+valu
+R0
+R1
+!i10b 1
+!s100 gzn4OP;MYb@KTBE<GFRS70
+IfHVl6ng^?`NTY4Pm4PW3R2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 332
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+varm
+R0
+R1
+!i10b 1
+!s100 d>XS^4lF<mB1CgeNDWa=l3
+ICC5YCM;mz67H@YMTzGOR:2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 1
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vconditional
+R0
+R1
+!i10b 1
+!s100 mOnO@dMI9`hm?GaWoR55L1
+I1eL6Ia=6Q?9Zl9h`ImV>61
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 154
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vcontroller
+R0
+R1
+!i10b 1
+!s100 AYkO00]0l85?]NQ1cMI;f2
+I[j_Z;cXNR=cAYS_ASXU_W2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 59
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vdatapath
+R0
+R1
+!i10b 1
+!s100 mj<=NjaMeFcQ;I?0N4hnc1
+IXjg@9o::OS[Wb6D:JzLXI3
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 191
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vdmem
+R0
+R1
+!i10b 1
+!s100 dkSP>_@QKa^AmFjmk3<Q50
+IazP5:3znJT;KmGmK`hH^g2
+R2
+Z14 !s105 MyDE0_Nano_sv_unit
+S1
+R4
+Z15 w1765765994
+Z16 8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv
+Z17 FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv
+L0 177
+R8
+r1
+!s85 0
+31
+R9
+Z18 !s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv|
+Z19 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyDE0_Nano.sv|
+!i113 1
+R12
+R13
+veqcmp
+R0
+R1
+!i10b 1
+!s100 ;[LC6mIfg:S;[@Oj:NfMm0
+ImcomZ1Q4M6b@YRGR2TndY2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 428
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vextend
+R0
+R1
+!i10b 1
+!s100 fVk:LC5]MfTFDce`XgP4c0
+I:3C8P9W=0X3l;ELfA>W>;1
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 318
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vflopenr
+R0
+R1
+!i10b 1
+!s100 Q?[i0mG:nO:>_3Xzl>0Ym2
+I90_lQl11SoWnO:hhgdc2[2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 366
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vflopenrc
+R0
+R1
+!i10b 1
+!s100 m<kU?BL_2Q>A<0lm<eV^41
+ImX:Jefi`c?lcWG=::o4>93
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 388
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vflopr
+R0
+R1
+!i10b 1
+!s100 4J]IMBYZd?LTmG9hi[`XD3
+IQoV^mzl2M5FJ<Z6G_Y2cQ2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 377
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vfloprc
+R0
+R1
+!i10b 1
+!s100 ]1a5ce[QmM>@YcD>oc91c2
+IS]B9EfK2A4>jA26IbCdlb2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 401
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vfpu_top
+R0
+R1
+!i10b 1
+!s100 HNHFBGnOP=ZMKGAZ_K[[m1
+IlQhZebQJSEL]=`L1gSV:_2
+R2
+!s105 fpu_top_sv_unit
+S1
+R4
+w1765766001
+8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv
+FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv
+L0 6
+R8
+r1
+!s85 0
+31
+R9
+!s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/fpu/fpu_top.sv|
+!i113 1
+R12
+R13
+vhazard
+R0
+R1
+!i10b 1
+!s100 l;M`a11j=h[oL1d=^[n2=1
+Ik8BbaU13GW4URH]EU@EIA3
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 262
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vimem
+R0
+R1
+!i10b 1
+!s100 f>=U6H<lnhg9OcBK_E:<O1
+ICQ7Y6X1MOZFHn84oU=zll3
+R2
+R14
+S1
+R4
+R15
+R16
+R17
+L0 193
+R8
+r1
+!s85 0
+31
+R9
+R18
+R19
+!i113 1
+R12
+R13
+vmux2
+R0
+R1
+!i10b 1
+!s100 Y_lTBATnlVf=K09Ef1cUg0
+I3dgXVzFi?emCRnclBaXQZ2
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 414
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vmux3
+R0
+R1
+!i10b 1
+!s100 ;EPSa0NKBbgB9nYaIgMCB1
+I`^2GU<?FD^@OKbOXA;DZO0
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 421
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vMyDE0_Nano
+R0
+R1
+!i10b 1
+!s100 6^3CJQHo0[Bc5hVjFe5:V1
+IiY8^A3WV?i?9=N;3:>GDP2
+R2
+R14
+S1
+R4
+R15
+R16
+R17
+L0 5
+R8
+r1
+!s85 0
+31
+R9
+R18
+R19
+!i113 1
+R12
+R13
+n@my@d@e0_@nano
+vMyTestbench
+R0
+R1
+!i10b 1
+!s100 ];b^<ik=J>Z9_d4IEQR[_2
+IclOa6ZB70di9kQm>h_:i13
+R2
+!s105 MyTestbench_sv_unit
+S1
+R4
+w1765765874
+8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv
+FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv
+L0 3
+R8
+r1
+!s85 0
+31
+R9
+!s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MyTestbench.sv|
+!i113 1
+R12
+R13
+n@my@testbench
+vregfile
+R0
+R1
+!i10b 1
+!s100 iAPSQ_BCUiY[0KT:b77Rb0
+IlSFFR:dZQ<WF2no?]AKPm1
+R2
+R3
+S1
+R4
+R5
+R6
+R7
+L0 296
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 1
+R12
+R13
+vspi_slave
+R0
+R1
+!i10b 1
+!s100 LD07[>W@GY2ZRJDYAG=mD2
+IL2Rf]`Kl]7o[CBFW<z?3m3
+R2
+!s105 MySPI_sv_unit
+S1
+R4
+w1765727984
+8C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv
+FC:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv
+L0 6
+R8
+r1
+!s85 0
+31
+R9
+!s107 C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/PJ/Desktop/LELEC2531/Projet_FPU/Quartus_Pipelined/MySPI.sv|
+!i113 1
+R12
+R13
