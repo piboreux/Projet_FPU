@@ -3,81 +3,128 @@
 module MyTestbench();
 
   // Clock & reset
-  logic        clk;
-  logic        reset;
+  logic clk;
+  logic reset;
 
-  // Bus avec la carte
-  logic [31:0] ReadData;
-  logic [31:0] WriteData;
-  logic [12:0] DataAdr;
-  logic        MemWrite;
+  // Signaux de contrôle du testbench
+  logic [31:0] tb_WriteData;
+  logic [12:0] tb_DataAdr;
+  logic        tb_MemWrite;
+  logic [31:0] tb_ReadData;
 
-  wire [33:0]	GPIO_0_PI;
-  wire [33:0]	GPIO_1;
-  wire [12:0]	GPIO_2;
+  // GPIO wires - connexions explicites
+  logic [33:0] gpio_0_out;  // Sortie du DUT
+  logic [33:0] gpio_0_in;   // Entrée au DUT
+  logic [33:0] gpio_1_in;
+  logic [12:0] gpio_2_in;
 
   integer f;
 
   // Instantiate device under test
   MyDE0_Nano dut(
     .CLOCK_50(clk), 
-    .GPIO_0_PI(GPIO_0_PI),
-    .GPIO_1(GPIO_1),  
-    .GPIO_2(GPIO_2)
+    .GPIO_0_PI(gpio_0_in),
+    .GPIO_1(gpio_1_in),  
+    .GPIO_2(gpio_2_in)
   );
 
-  // Connect testbench signals to DUT
-  assign GPIO_0_PI[1] = reset;
-  assign MemWrite      = GPIO_1[33];
-  assign WriteData     = GPIO_1[31:0];  // 32-bit pour FPU
-  assign DataAdr       = GPIO_2;
-  assign ReadData      = GPIO_1[31:0];  // Lire 32 bits du FPU
+  // ============ CONNEXIONS SIMPLIFIÉES ============
+  // Entrées au DUT
+  assign gpio_0_in[0] = reset;
+  assign gpio_0_in[33:1] = 33'bz;  // Le DUT pilote ces bits en sortie
+  
+  assign gpio_1_in[33] = tb_MemWrite;
+  assign gpio_1_in[31:0] = tb_WriteData;
+  assign gpio_1_in[32] = 1'b0;
+  
+  assign gpio_2_in = tb_DataAdr;
+
+  // Sortie du DUT - Lecture via gpio_0_in (qui est inout)
+  assign tb_ReadData = gpio_0_in[32:1];
+  // =============================================
 
   // Initialize test
   initial begin
     f = $fopen("student_simul.txt", "w");
     
-    // Reset DUT
-    reset <= 1; # 20; 
-    reset <= 0; # 20;
+    // Initialiser
+    tb_MemWrite  = 0;
+    tb_DataAdr   = 0;
+    tb_WriteData = 0;
+    
+    // Reset
+    reset = 1; 
+    #20; 
+    reset = 0; 
+    #20;
+    
+    $display("=== Starting FPU Test ===");
 
-    // ---------- TEST FPU ----------
-    // Exemple : addition A + B
-    // Ã‰crire opÃ©rande A
-    DataAdr   <= 13'h0600;   // Adresse FPU pour operande A
-    WriteData <= 32'd10;     // Valeur A = 10
+    // Écrire A = 10
+    @(negedge clk);
+    tb_DataAdr   = 13'h0600;
+    tb_WriteData = 32'd10;
+    tb_MemWrite  = 1;
+    $display("Time %0t: Writing A=10 to 0x600", $time);
+
+    // Écrire B = 20
+    @(negedge clk);
+    tb_DataAdr   = 13'h0604;
+    tb_WriteData = 32'd20;
+    tb_MemWrite  = 1;
+    $display("Time %0t: Writing B=20 to 0x604", $time);
+
+    // Écrire CMD = 1
+    @(negedge clk);
+    tb_DataAdr   = 13'h0608;
+    tb_WriteData = 32'd1;
+    tb_MemWrite  = 1;
+    $display("Time %0t: Writing CMD=1 to 0x608", $time);
+
+    // Arrêter écriture
+    @(negedge clk);
+    tb_MemWrite  = 0;
+    
     @(negedge clk);
 
-    // Ã‰crire opÃ©rande B
-    DataAdr   <= 13'h0604;   // Adresse FPU pour operande B
-    WriteData <= 32'd20;     // Valeur B = 20
+    // Lire résultat
+    tb_DataAdr   = 13'h060C;
     @(negedge clk);
+    
+    // Attendre propagation
+    #2;
+    
+    $display("Time %0t: tb_ReadData = %d (raw = %h)", $time, tb_ReadData, tb_ReadData);
+    $display("Time %0t: FPU result = %d (expected 30)", $time, tb_ReadData);
+    $fwrite(f, "FPU result: %d\n", tb_ReadData);
+    
+    // Vérification
+    if (tb_ReadData === 32'd30) begin
+        $display("*** TEST PASSED ***");
+    end else if (tb_ReadData === 32'bx) begin
+        $display("*** TEST FAILED - ReadData is X ***");
+    end else begin
+        $display("*** TEST FAILED - Expected 30, got %d ***", tb_ReadData);
+    end
 
-    // DÃ©clencher le calcul (supposons registre de commande Ã  0x0608)
-    DataAdr   <= 13'h0608;   
-    WriteData <= 32'd1;      // Commande : addition
-    @(negedge clk);
-
-    // Attendre un cycle pour calculer
-    @(negedge clk);
-
-    // Lire le rÃ©sultat
-    DataAdr <= 13'h060C;     // Adresse FPU pour rÃ©sultat
-    @(negedge clk);
-    $display("FPU result: %d", ReadData);
-    $fwrite(f, "FPU result: %d\n", ReadData);
-
+    #100;
+    $display("=== Test Complete ===");
+    $fclose(f);
     $stop;
   end
 
   // Generate clock
   always begin
-    clk <= 1; #5; clk <= 0; #5;
+    clk = 1; #5; 
+    clk = 0; #5;
   end
 
-  // Log all bus activity
+  // Log
   always @(negedge clk) begin
-    $fwrite(f, "Addr: %h, WriteData: %h, ReadData: %h, MemWrite: %b\n", DataAdr, WriteData, ReadData, MemWrite);
+    if (reset == 0) begin
+      $fwrite(f, "Time=%0t Addr=%h WData=%d RData=%d WE=%b\n", 
+              $time, tb_DataAdr, tb_WriteData, tb_ReadData, tb_MemWrite);
+    end
   end
 
 endmodule

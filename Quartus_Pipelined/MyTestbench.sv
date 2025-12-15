@@ -6,13 +6,13 @@ module MyTestbench();
   logic clk;
   logic reset;
 
-  // Signaux de contr√¥le du testbench (LOCAL)
+  // Signaux de contrÙle du testbench
   logic [31:0] tb_WriteData;
   logic [12:0] tb_DataAdr;
-  logic        tb_MemWrite;      // ‚Üê Signal LOCAL pour piloter MemWrite
+  logic        tb_MemWrite;
   logic [31:0] tb_ReadData;
 
-  // GPIO wires connectant le testbench au DUT
+  // GPIO wires
   wire [33:0] GPIO_0_PI;
   wire [33:0] GPIO_1;
   wire [12:0] GPIO_2;
@@ -27,23 +27,29 @@ module MyTestbench();
     .GPIO_2(GPIO_2)
   );
 
-  // Connect testbench signals to DUT
-  assign GPIO_0_PI[1]  = reset;
-  assign GPIO_1[33]    = tb_MemWrite;      // ‚Üê Piloter MemWrite
-  assign GPIO_1[31:0]  = tb_WriteData;     // √âcrire 32 bits
+  // ============ CONNEXIONS CORRIG…ES ============
+  // Reset sur bit isolÈ
+  assign GPIO_0_PI[0] = reset;
+  
+  // SORTIES du testbench ? ENTR…ES du DUT
+  assign GPIO_1[33]    = tb_MemWrite;
+  assign GPIO_1[31:0]  = tb_WriteData;
   assign GPIO_2        = tb_DataAdr;
-  assign tb_ReadData   = GPIO_1[31:0];     // Lire 32 bits
+
+  // ENTR…E du testbench ? SORTIE du DUT (bits [33:2] pour donnÈes 32-bit)
+  assign tb_ReadData = {GPIO_0_PI[33:2]};
+  // =============================================
 
   // Initialize test
   initial begin
     f = $fopen("student_simul.txt", "w");
     
-    // Initialiser tous les signaux
+    // Initialiser
     tb_MemWrite  = 0;
     tb_DataAdr   = 0;
     tb_WriteData = 0;
     
-    // Reset DUT
+    // Reset
     reset = 1; 
     #20; 
     reset = 0; 
@@ -51,42 +57,49 @@ module MyTestbench();
     
     $display("=== Starting FPU Test ===");
 
-    // ---------- TEST FPU ----------
-    
-    // √âcrire op√©rande A = 10
+    // …crire A = 10
     @(negedge clk);
     tb_DataAdr   = 13'h0600;
     tb_WriteData = 32'd10;
     tb_MemWrite  = 1;
-    $display("Time %0t: Writing A=10 to address 0x600", $time);
+    $display("Time %0t: Writing A=10 to 0x600", $time);
 
-    // √âcrire op√©rande B = 20
+    // …crire B = 20
     @(negedge clk);
     tb_DataAdr   = 13'h0604;
     tb_WriteData = 32'd20;
     tb_MemWrite  = 1;
-    $display("Time %0t: Writing B=20 to address 0x604", $time);
+    $display("Time %0t: Writing B=20 to 0x604", $time);
 
-    // D√©clencher le calcul (addition)
+    // …crire CMD = 1
     @(negedge clk);
     tb_DataAdr   = 13'h0608;
     tb_WriteData = 32'd1;
     tb_MemWrite  = 1;
-    $display("Time %0t: Writing CMD=1 (ADD) to address 0x608", $time);
+    $display("Time %0t: Writing CMD=1 to 0x608", $time);
 
-    // Arr√™ter l'√©criture et attendre le calcul
+    // ArrÍter Ècriture et attendre calcul
     @(negedge clk);
     tb_MemWrite  = 0;
     
     @(negedge clk);
 
-    // Lire le r√©sultat
+    // Lire rÈsultat
     tb_DataAdr   = 13'h060C;
-    tb_MemWrite  = 0;
     @(negedge clk);
+    
+    // Attendre propagation combinatoire
+    #2;
     
     $display("Time %0t: FPU result = %d (expected 30)", $time, tb_ReadData);
     $fwrite(f, "FPU result: %d\n", tb_ReadData);
+    
+    // VÈrification
+    if (tb_ReadData == 32'd30) begin
+        $display("??? TEST PASSED ???");
+    end else begin
+        $display("??? TEST FAILED ??? - Expected 30, got %d", tb_ReadData);
+    end
 
     #100;
     $display("=== Test Complete ===");
@@ -100,10 +113,10 @@ module MyTestbench();
     clk = 0; #5;
   end
 
-  // Log all bus activity
+  // Log
   always @(negedge clk) begin
     if (reset == 0) begin
-      $fwrite(f, "Time=%0t Addr=%h WData=%h RData=%h WE=%b\n", 
+      $fwrite(f, "Time=%0t Addr=%h WData=%d RData=%d WE=%b\n", 
               $time, tb_DataAdr, tb_WriteData, tb_ReadData, tb_MemWrite);
     end
   end

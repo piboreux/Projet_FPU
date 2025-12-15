@@ -1,7 +1,3 @@
-//=======================================================
-//  MyDE0_Nano - top module for ARM + FPU + Memories + SPI
-//=======================================================
-
 module MyDE0_Nano(
 
 //////////// CLOCK //////////
@@ -50,15 +46,20 @@ input logic                 ADC_SDAT,
 inout logic     [12:0]      GPIO_2,
 input logic      [2:0]      GPIO_2_IN,
 
-//////////// GPIO_0, GPIO_0 connect to GPIO Default //////////
+//////////// GPIO_0 //////////
 inout logic     [33:0]      GPIO_0_PI,
 input logic      [1:0]      GPIO_0_PI_IN,
 
-//////////// GPIO_1, GPIO_1 connect to GPIO Default //////////
+//////////// GPIO_1 //////////
 inout logic     [33:0]      GPIO_1,
 input logic      [1:0]      GPIO_1_IN
 );
 
+    //=======================================================
+    // MODE SELECTION
+    //=======================================================
+    parameter TESTBENCH_MODE = 1;
+    
     //=======================================================
     // Internal signals
     //=======================================================
@@ -72,11 +73,14 @@ input logic      [1:0]      GPIO_1_IN
     logic [31:0] spi_data;
     logic [31:0] fpu_data_out;
     
+    logic [31:0] ARM_DataAdrM, ARM_WriteDataM;
+    logic        ARM_MemWriteM;
+    
     //=======================================================
-    // Clock and reset
+    // Clock and reset - CORRIG…
     //=======================================================
     assign clk   = CLOCK_50;
-    assign reset = GPIO_0_PI[1];
+    assign reset = GPIO_0_PI[0];  // ? bit[0] au lieu de bit[1]
   
     //=======================================================
     // Instantiate ARM processor and memories
@@ -86,9 +90,9 @@ input logic      [1:0]      GPIO_1_IN
         .reset     (reset),
         .PCF       (PCF),
         .InstrF    (InstrF),
-        .MemWriteM (MemWriteM),
-        .ALUOutM   (DataAdrM),      // ‚Üê ALUOutM est l'adresse
-        .WriteDataM(WriteDataM),
+        .MemWriteM (ARM_MemWriteM),
+        .ALUOutM   (ARM_DataAdrM),
+        .WriteDataM(ARM_WriteDataM),
         .ReadDataM (ReadDataM)
     );
     
@@ -101,24 +105,34 @@ input logic      [1:0]      GPIO_1_IN
     fpu_top fpu(
         .clk        (clk),
         .reset      (reset),
-        .chip_select(cs_fpu),
-        .addr       (DataAdrM[12:0]),  // ‚Üê Passer l'adresse
+        .chip_select(cs_fpu & MemWriteM),
+        .addr       (DataAdrM[12:0]),
         .data_in    (WriteDataM),
         .data_out   (fpu_data_out)
     );
     
     //=======================================================
-    // Chip Select logic (address decoding)
+    // MODE MUX
     //=======================================================
-    // Address MAP : 0x0000 - 0x03FF : RAM (255 words of 32 bits)
-    //               0x0400 - 0x043F : SPI - 16 reg. of 32 bits
-    //               0x0500          : LED Reg
-    //               0x0600 - 0x06FF : FPU
+    generate
+        if (TESTBENCH_MODE) begin : tb_mode
+            assign MemWriteM  = GPIO_1[33];
+            assign WriteDataM = GPIO_1[31:0];
+            assign DataAdrM   = {19'b0, GPIO_2};
+        end else begin : arm_mode
+            assign MemWriteM  = ARM_MemWriteM;
+            assign WriteDataM = ARM_WriteDataM;
+            assign DataAdrM   = ARM_DataAdrM;
+        end
+    endgenerate
     
-    assign cs_dmem = ~DataAdrM[11] & ~DataAdrM[10];                            // 0x0000 - 0x03FF
-    assign cs_spi  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] & ~DataAdrM[8];  // 0x0400 - 0x04FF
-    assign cs_led  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] &  DataAdrM[8];  // 0x0500 - 0x05FF
-    assign cs_fpu  = ~DataAdrM[11] &  DataAdrM[10] &  DataAdrM[9] & ~DataAdrM[8];  // 0x0600 - 0x06FF
+    //=======================================================
+    // Chip Select logic
+    //=======================================================
+    assign cs_dmem = ~DataAdrM[11] & ~DataAdrM[10];
+    assign cs_spi  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] & ~DataAdrM[8];
+    assign cs_led  = ~DataAdrM[11] &  DataAdrM[10] & ~DataAdrM[9] &  DataAdrM[8];
+    assign cs_fpu  = ~DataAdrM[11] &  DataAdrM[10] &  DataAdrM[9] & ~DataAdrM[8];
     
     //=======================================================
     // Read Data Mux
@@ -140,12 +154,13 @@ input logic      [1:0]      GPIO_1_IN
             led_reg <= WriteDataM[7:0];
     
     //=======================================================
-    // GPIO Debug / Testbench Interface
+    // GPIO Testbench Interface - CORRIG…
     //=======================================================
-    assign MemWriteM   = GPIO_1[33];
-    assign WriteDataM  = GPIO_1[31:0];
-    assign DataAdrM    = {19'b0, GPIO_2};
-    assign GPIO_1[31:0] = ReadDataM;     // Renvoyer les donn√©es
+    // Sortie vers testbench sur bits [33:2]
+    assign GPIO_0_PI[33:2] = ReadDataM;
+    // bit[0] est le reset (entrÈe)
+    // bit[1] peut rester non connectÈ ou ‡ z
+    assign GPIO_0_PI[1] = 1'bz;
     
     //=======================================================
     // SPI
@@ -172,29 +187,20 @@ input logic      [1:0]      GPIO_1_IN
 endmodule
 
 //=======================================================
-// Data Memory
+// Memories
 //=======================================================
 module dmem(input logic clk, we, cs,
             input logic [31:0] a, wd,
             output logic [31:0] rd);
-
     logic [31:0] RAM[255:0];
-
-    assign rd = RAM[a[31:2]]; // word aligned
-
+    assign rd = RAM[a[31:2]];
     always_ff @(posedge clk)
-        if (cs & we)
-            RAM[a[31:2]] <= wd;
+        if (cs & we) RAM[a[31:2]] <= wd;
 endmodule
 
-//=======================================================
-// Instruction Memory
-//=======================================================
 module imem(input logic [31:0] a,
             output logic [31:0] rd);
-
     logic [31:0] RAM[255:0];
-
     initial $readmemh("MyProgram_Pipelined.hex", RAM);
-    assign rd = RAM[a[31:2]]; // word aligned
+    assign rd = RAM[a[31:2]];
 endmodule

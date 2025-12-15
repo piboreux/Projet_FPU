@@ -1,18 +1,19 @@
-Time=25 Addr=0000 WData=00000000 RData=xxxxxxxx WE=0
-Time=35 Addr=0000 WData=00000000 RData=00000000 WE=0
-Time=45 Addr=0000 WData=00000000 RData=00000000 WE=0
-Time=55 Addr=0600 WData=0000000a RData=0000000X WE=1
-Time=65 Addr=0604 WData=00000014 RData=000000XX WE=1
-Time=75 Addr=0608 WData=00000001 RData=0000000X WE=1
-Time=85 Addr=0608 WData=00000001 RData=0000000X WE=0
-Time=95 Addr=060c WData=00000001 RData=0000000X WE=0
+Time=25 Addr=0000 WData=         0 RData=         x WE=0
+Time=35 Addr=0000 WData=         0 RData=         x WE=0
+Time=45 Addr=0000 WData=         0 RData=         x WE=0
+Time=55 Addr=0600 WData=        10 RData=         X WE=1
+Time=65 Addr=0604 WData=        20 RData=         X WE=1
+Time=75 Addr=0608 WData=         1 RData=         X WE=1
+Time=85 Addr=0608 WData=         1 RData=         X WE=0
+Time=95 Addr=060c WData=         1 RData=         X WE=0
 FPU result:          X
-Time=105 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=115 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=125 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=135 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=145 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=155 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=165 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=175 Addr=060c WData=00000001 RData=0000000X WE=0
-Time=185 Addr=060c WData=00000001 RData=0000000X WE=0
+Time=105 Addr=060c WData=         1 RData=         X WE=0
+Time=115 Addr=060c WData=         1 RData=         X WE=0
+Time=125 Addr=060c WData=         1 RData=         X WE=0
+Time=135 Addr=060c WData=         1 RData=         X WE=0
+Time=145 Addr=060c WData=         1 RData=         X WE=0
+Time=155 Addr=060c WData=         1 RData=         X WE=0
+Time=165 Addr=060c WData=         1 RData=         X WE=0
+Time=175 Addr=060c WData=         1 RData=         X WE=0
+Time=185 Addr=060c WData=         1 RData=         X WE=0
+Time=195 Addr=060c WData=         1 RData=         X WE=0
