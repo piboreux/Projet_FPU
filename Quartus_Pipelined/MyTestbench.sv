@@ -257,6 +257,52 @@ module MyTestbench();
                    32'h41200000, 32'h41200000, 32'd3, 32'h42C80000);
 
     //=======================================================
+    // EDGE CASE TESTS (IEEE-754)
+    //=======================================================
+    $display("\n????? EDGE CASE TESTS ?????");
+
+    // Test 15: Addition with +Inf
+    test_operation("ADD: 1.0 + +Inf", 
+                  32'h3F800000, 32'h7F800000, 32'd1, 32'h7F800000);
+
+    // Test 16: Addition with -Inf
+    test_operation("ADD: 1.0 + -Inf", 
+                  32'h3F800000, 32'hFF800000, 32'd1, 32'hFF800000);
+
+    // Test 17: Addition with NaN
+    test_operation("ADD: 1.0 + NaN", 
+                  32'h3F800000, 32'h7FC00000, 32'd1, 32'h7FC00000);
+
+    // Test 18: Multiplication by zero (positive and negative)
+    test_operation("MUL: +0.0 * 5.0", 
+                  32'h00000000, 32'h40A00000, 32'd3, 32'h00000000);
+
+    test_operation("MUL: -0.0 * 5.0", 
+                  32'h80000000, 32'h40A00000, 32'd3, 32'h80000000);
+
+    // Test 19: Subtraction resulting in zero
+    test_operation("SUB: +Inf - +Inf", 
+                  32'h7F800000, 32'h7F800000, 32'd2, 32'h7FC00000); // NaN
+
+    // Test 20: Multiplication resulting in overflow
+    test_operation("MUL: Large * Large", 
+                  32'h7F000000, 32'h7F000000, 32'd3, 32'h7F800000); // +Inf
+
+    // Test 21: Multiplication with denormalized numbers
+    test_operation("MUL: denormal * denormal", 
+                  32'h00000001, 32'h00000002, 32'd3, 32'h00000000);
+
+    // Test 22: Addition of denormal + normal
+    test_operation("ADD: denormal + normal", 
+                  32'h00000001, 32'h3F800000, 32'd1, 32'h3F800000);
+
+    // Test 23: Subtraction of normal - denormal
+    test_operation("SUB: normal - denormal", 
+                  32'h3F800000, 32'h00000001, 32'd2, 32'h3F7FFFFF); // Slightly less than 1.0
+
+
+
+    //=======================================================
     // FINAL SUMMARY
     //=======================================================
     #100;
